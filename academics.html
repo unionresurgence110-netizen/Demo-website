@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academics | YOUR COLLEGE </title><link rel="stylesheet" href="style.css"></head>
+<body><nav class="navbar">
+<div class="container">
+<a class="brand" href="index.html">YOUR COLLEGE </a>
+<div class="nav-actions">
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+<button class="menu-toggle" id="menuToggle" aria-label="Open menu">⋮</button>
+</div>
+<div class="nav-links" id="navLinks">
+<a href="index.html" data-nav="home">Home</a>
+<a href="about.html" data-nav="about">About</a>
+<a href="academics.html" data-nav="academics">Academics</a>
+<a href="facilities.html" data-nav="facilities">Facilities</a>
+<div class="nav-gallery">
+<a href="gallery.html">🖼️gallery</a>
+</div>
+</div>
+<a href="contact.html" data-nav="contact">Contact</a>
+</div>
+</div>
+</nav><main><section class="page-hero"><div class="container"><span class="eyebrow">Academics</span><h1 class="movable-text">Learning That Prepares You</h1><p>Focused instruction, practical exposure and continuous guidance.</p></div></section>
+<section class="section"><div class="container cards-grid"><div class="feature-card"><h3>Science</h3><p>Concept-focused learning with laboratory practice.</p></div><div class="feature-card"><h3>Management</h3><p>Business, accounting and practical management learning.</p></div><div class="feature-card"><h3>Computer Education</h3><p>Digital skills and practical computer learning.</p></div></div></section></main><footer class="footer"><div class="container">
+<div class="footer-grid">
+<div><h3>YOUR COLLEGE </h3><p>Committed to quality education, character, discipline and practical learning.</p></div>
+<div><h4>Quick Links</h4><p><a href="about.html">About</a></p><p><a href="academics.html">Academics</a></p><p><a href="gallery.html">Gallery</a></p></div>
+<div><h4>Connect</h4><p><a href="https://facebook.com/" target="_blank" rel="noopener">Facebook Page</a></p><p><a href="contact.html">Contact Us</a></p></div>
+</div><div class="footer-bottom">© 2026 YOUR COLLEGE. [All rights reserved to the developer]</div>
+</div></footer>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const b=document.getElementById('welcomeBanner'), c=document.getElementById('welcomeClose');
+ if(b && c) c.onclick=()=>b.remove();
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const menu=document.getElementById("menuToggle"), links=document.getElementById("navLinks");
+  if(menu && links){
+    menu.addEventListener("click",e=>{e.stopPropagation();links.classList.toggle("open");});
+    links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>links.classList.remove("open")));
+    document.addEventListener("click",e=>{if(!links.contains(e.target)&&e.target!==menu) links.classList.remove("open")});
+  }
+
+  const theme=document.getElementById("themeToggle");
+  const saved=localStorage.getItem("martyrs-theme");
+  if(saved==="dark") document.body.classList.add("dark");
+  if(theme){
+    const update=()=>theme.textContent=document.body.classList.contains("dark")?"☀":"◐";
+    update();
+    theme.addEventListener("click",()=>{
+      document.body.classList.toggle("dark");
+      localStorage.setItem("martyrs-theme",document.body.classList.contains("dark")?"dark":"light");
+      update();
+    });
+  }
+
+  // Make major headings gently movable with drag on desktop/mobile.
+  document.querySelectorAll(".movable-text").forEach(el=>{
+    let dragging=false,sx=0,sy=0,ox=0,oy=0;
+    el.addEventListener("pointerdown",e=>{
+      dragging=true;el.setPointerCapture(e.pointerId);
+      sx=e.clientX;sy=e.clientY;ox=parseFloat(el.dataset.mx||0);oy=parseFloat(el.dataset.my||0);
+    });
+    el.addEventListener("pointermove",e=>{
+      if(!dragging)return;
+      const x=ox+(e.clientX-sx), y=oy+(e.clientY-sy);
+      el.dataset.mx=x;el.dataset.my=y;el.style.transform=`translate(${x}px,${y}px)`;
+    });
+    el.addEventListener("pointerup",()=>dragging=false);
+  });
+});
+</script>
+</body></html>

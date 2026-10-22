@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>College Content Editor</title><link rel="stylesheet" href="admin.css"></head><body><div class="wrap">
+<header><a href="index.html">← View Website</a><h1 class="movable-text">College Content Editor</h1><p>Edit text here. Images/videos use simple fixed filenames, so you only replace files inside <b>images/</b> and <b>videos/</b>.</p></header>
+<div id="fields" class="grid"></div><button id="save">Save All Text</button> <button id="reset" class="secondary">Reset Demo</button><span id="status"></span>
+<section class="panel"><h2 class="movable-text">📁 Media naming — zero code editing</h2><p><b>Banner:</b> images/banner.jpg</p><p><b>Founders:</b> images/founder1.jpg → founder5.jpg</p><p><b>Teachers:</b> images/teacher1.jpg → teacher50.jpg</p><p><b>Videos:</b> videos/video1.mp4 → video20.mp4</p><p class="hint">Keep the exact filename. Replace the file, refresh the website, and the matching slot updates. If you have fewer teachers/videos, unused slots can remain placeholders.</p></section></div>
+<script>
+const base=JSON.parse(localStorage.getItem("collegeData")||"null")||{brandName:"YOUR COLLEGE",heroEyebrow:"EXCELLENCE • DISCOVERY • FUTURE",heroTitle:"Build Your Future<br><span>With Confidence.</span>",heroText:"A modern learning environment where ambitious students learn, lead and grow.",aboutTitle:"Education that goes beyond the classroom.",aboutText:"YOUR COLLEGE combines strong academics, practical learning and a supportive community to prepare students for higher education and meaningful careers.",about1:"Experienced faculty",about2:"Modern classrooms",about3:"Career guidance",about4:"Clubs & activities",videoTitle:"See the place where your next chapter begins.",videoText:"Explore our classrooms, activities and campus community.",admissionTitle:"Your next chapter starts here.",admissionText:"Applications are now open. Contact our admissions team for details.",phone:"+977 9800000000",email:"admissions@horizon.edu.np",address:"Dharan, Koshi Province, Nepal",footerText:"Knowledge. Character. Opportunity.",stats:[["25+","Years of Excellence"],["4,500+","Alumni"],["30+","Expert Faculty"]],programs:[["01","Science","A strong foundation for university, technology and research."],["02","Management","Business, leadership and practical skills for tomorrow."],["03","Humanities","Think critically, communicate clearly and understand society."]],founders:[["Founder Name","Founder & Chairperson","images/founder1.jpg"],["Co-Founder Name","Co-Founder & Director","images/founder2.jpg"],["Founder Name","Academic Founder","images/founder3.jpg"],["Founder Name","Board Founder","images/founder4.jpg"],["Founder Name","Founding Member","images/founder5.jpg"]],faculty:Array.from({length:50},(_,i)=>["Teacher "+(i+1),i<10?"Department Head":"Faculty Member","images/teacher"+(i+1)+".jpg"]),notices:[["Admissions 2026/27 are now open.","Apply early and secure your preferred program."],["Orientation Program","New students are invited to our welcome and orientation session."],["Annual Sports Week","Inter-house sports activities begin this month."]]};
+const text=["brandName","heroEyebrow","heroTitle","heroText","aboutTitle","aboutText","about1","about2","about3","about4","videoTitle","videoText","admissionTitle","admissionText","phone","email","address","footerText"];
+let html=text.map(k=>`<section class="panel"><label>${k}<textarea data-key="${k}">${base[k]||""}</textarea></label></section>`).join("");
+html+=`<section class="panel wide"><h2 class="movable-text">Programs</h2>${base.programs.map((x,i)=>`<div class="row">${x.map((v,k)=>`<input data-p="${i}" data-k="${k}" value="${v.replace(/"/g,"&quot;")}">`).join("")}</div>`).join("")}</section>`;
+html+=`<section class="panel wide"><h2 class="movable-text">Founders</h2>${base.founders.map((x,i)=>`<div class="row">${x.map((v,k)=>`<input data-f="${i}" data-k="${k}" value="${v.replace(/"/g,"&quot;")}">`).join("")}</div>`).join("")}</section>`;
+html+=`<section class="panel wide"><h2 class="movable-text">Teachers — 50 slots</h2>${base.faculty.map((x,i)=>`<div class="row">${x.map((v,k)=>`<input data-t="${i}" data-k="${k}" value="${v.replace(/"/g,"&quot;")}">`).join("")}</div>`).join("")}</section>`;
+html+=`<section class="panel wide"><h2 class="movable-text">Notices</h2>${base.notices.map((x,i)=>`<div class="row">${x.map((v,k)=>`<input data-n="${i}" data-k="${k}" value="${v.replace(/"/g,"&quot;")}">`).join("")}</div>`).join("")}</section>`;
+document.getElementById("fields").innerHTML=html;
+document.getElementById("save").onclick=()=>{text.forEach(k=>base[k]=document.querySelector('[data-key="'+k+'"]').value);document.querySelectorAll("[data-p]").forEach(e=>base.programs[e.dataset.p][e.dataset.k]=e.value);document.querySelectorAll("[data-f]").forEach(e=>base.founders[e.dataset.f][e.dataset.k]=e.value);document.querySelectorAll("[data-t]").forEach(e=>base.faculty[e.dataset.t][e.dataset.k]=e.value);document.querySelectorAll("[data-n]").forEach(e=>base.notices[e.dataset.n][e.dataset.k]=e.value);localStorage.setItem("collegeData",JSON.stringify(base));document.getElementById("status").textContent="Saved ✓";};document.getElementById("reset").onclick=()=>{localStorage.removeItem("collegeData");location.reload()};
+</script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const menu=document.getElementById("menuToggle"), links=document.getElementById("navLinks");
+  if(menu && links){
+    menu.addEventListener("click",e=>{e.stopPropagation();links.classList.toggle("open");});
+    links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>links.classList.remove("open")));
+    document.addEventListener("click",e=>{if(!links.contains(e.target)&&e.target!==menu) links.classList.remove("open")});
+  }
+
+  const theme=document.getElementById("themeToggle");
+  const saved=localStorage.getItem("martyrs-theme");
+  if(saved==="dark") document.body.classList.add("dark");
+  if(theme){
+    const update=()=>theme.textContent=document.body.classList.contains("dark")?"☀":"◐";
+    update();
+    theme.addEventListener("click",()=>{
+      document.body.classList.toggle("dark");
+      localStorage.setItem("martyrs-theme",document.body.classList.contains("dark")?"dark":"light");
+      update();
+    });
+  }
+
+  // Make major headings gently movable with drag on desktop/mobile.
+  document.querySelectorAll(".movable-text").forEach(el=>{
+    let dragging=false,sx=0,sy=0,ox=0,oy=0;
+    el.addEventListener("pointerdown",e=>{
+      dragging=true;el.setPointerCapture(e.pointerId);
+      sx=e.clientX;sy=e.clientY;ox=parseFloat(el.dataset.mx||0);oy=parseFloat(el.dataset.my||0);
+    });
+    el.addEventListener("pointermove",e=>{
+      if(!dragging)return;
+      const x=ox+(e.clientX-sx), y=oy+(e.clientY-sy);
+      el.dataset.mx=x;el.dataset.my=y;el.style.transform=`translate(${x}px,${y}px)`;
+    });
+    el.addEventListener("pointerup",()=>dragging=false);
+  });
+});
+</script>
+</body></html>

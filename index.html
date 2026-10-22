@@ -1,0 +1,120 @@
+<!doctype html><html>
+<lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home | YOUR COLLEGE </title><link rel="stylesheet" href="style.css"></head>
+<body><div class="welcome-banner" id="welcomeBanner">
+<div class="welcome-card"><img src="images/welcome-banner.jpg" alt="College welcome banner">
+<button class="welcome-close" id="welcomeClose" aria-label="Close">×</button></div></div><nav class="navbar">
+<div class="container">
+<a class="brand" href="index.html">YOUR COLLEGE </a>
+<div class="nav-actions">
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+<button class="menu-toggle" id="menuToggle" aria-label="Open menu">⋮</button>
+</div>
+<div class="nav-links" id="navLinks">
+<a href="index.html" data-nav="home">Home</a>
+<a href="about.html" data-nav="about">About</a>
+<a href="academics.html" data-nav="academics">Academics</a>
+<a href="facilities.html" data-nav="facilities">Facilities</a>
+<div class="nav-gallery">
+<a href="gallery.html">🖼️gallery</a>
+</div>
+</div>
+<a href="contact.html" data-nav="contact">Contact</a>
+</div>
+</div>
+</nav><main><section class="hero">
+<div class="container hero-content">
+<span class="eyebrow">YOUR COLLEGE </span>
+<h1 class="movable-text">Learn. Lead. Build Your Future.</h1>
+<p>A modern academic environment focused on knowledge, discipline, confidence and practical learning.</p>
+<div class="hero-actions"><a class="btn btn-primary" href="contact.html">Visit to Apply</a><a class="btn btn-secondary" href="about.html">Explore College</a></div>
+</div></section>
+<section class="section"><div class="container">
+<div class="section-head"><span class="eyebrow">Why Choose Us</span><h2>Education Beyond the Classroom</h2>
+<p>We provide a balanced learning environment where students develop academically, creatively and practically.</p></div>
+<div class="stats-grid">
+<div class="stat-card"><strong>25+</strong><span>Years of Excellence</span></div>
+<div class="stat-card"><strong>30+</strong><span>Teachers</span></div>
+<div class="stat-card"><strong>1000+</strong><span>Students & Alumni</span></div>
+<div class="stat-card"><strong>8</strong><span>Core Facilities</span></div>
+</div></div></section>
+<section class="section section-alt"><div class="container split">
+<div><span class="eyebrow">About Us</span><h2>Building Strong Foundations for Tomorrow</h2>
+<p>YOUR COLLEGE  supports students with quality teaching, practical exposure, co-curricular activities and a positive academic culture.</p>
+<a class="text-link" href="about.html">Read More →</a></div>
+<div class="feature-card"><h3>Our Approach</h3><p>Strong academics, practical learning, sports, student activities and supportive guidance.</p></div>
+</div></section>
+<section class="section"><div class="container">
+<div class="section-head"><span class="eyebrow">College Highlights</span><h2>See Our Campus in Action</h2></div>
+<div class="inline-video"><video controls preload="metadata"><source src="videos/video1.mp4" type="video/mp4"></video></div>
+</div></section>
+<section class="section section-alt"><div class="container cta-box">
+<div><span class="eyebrow">Admissions</span><h2>Planning Your Next Step?</h2><p>Visit the college for admission guidance and further information.</p></div>
+<a class="btn btn-primary" href="contact.html">Visit to Apply</a></div></section></main><footer class="footer"><div class="container">
+<div class="footer-grid">
+<div><h3>YOUR COLLEGE  </h3><p>Committed to quality education, character, discipline and practical learning.</p></div>
+<div><h4>Quick Links</h4><p><a href="about.html">About</a></p><p><a href="academics.html">Academics</a></p><p><a href="gallery.html">Gallery</a></p></div>
+<div><h4>Connect</h4><p><a href="https://facebook.com/" target="_blank" rel="noopener">Facebook Page</a></p><p><a href="contact.html">Contact Us</a></p></div>
+</div><div class="footer-bottom">© 2026 YOUR COLLEGE. [All rights reserved to the developer]</div>
+</div></footer>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const b=document.getElementById('welcomeBanner'), c=document.getElementById('welcomeClose');
+ if(b && c) c.onclick=()=>b.remove();
+});
+</script>
+  
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const menu=document.getElementById("menuToggle"), links=document.getElementById("navLinks");
+  if(menu && links){
+    menu.addEventListener("click",e=>{e.stopPropagation();links.classList.toggle("open");});
+    links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>links.classList.remove("open")));
+    document.addEventListener("click",e=>{if(!links.contains(e.target)&&e.target!==menu) links.classList.remove("open")});
+  }
+
+  const theme=document.getElementById("themeToggle");
+  const saved=localStorage.getItem("martyrs-theme");
+  if(saved==="dark") document.body.classList.add("dark");
+  if(theme){
+    const update=()=>theme.textContent=document.body.classList.contains("dark")?"☀":"◐";
+    update();
+    theme.addEventListener("click",()=>{
+      document.body.classList.toggle("dark");
+      localStorage.setItem("martyrs-theme",document.body.classList.contains("dark")?"dark":"light");
+      update();
+    });
+  }
+
+  // 1. TYPING LOOP - Yahi naya hai
+  document.querySelectorAll(".movable-text").forEach(el=>{
+    const originalText = el.innerText; // text save
+    el.innerText = ""; // khali
+    let i = 0, isDeleting = false;
+
+    function run(){
+      el.innerText = originalText.substring(0,i) + "|"; // | cursor
+      
+      if(!isDeleting && i < originalText.length){
+        i++; // type
+        setTimeout(run,80);
+      }
+      else if(!isDeleting){
+        isDeleting=true;
+        setTimeout(run,3000); // 3 sec ruk
+      }
+      else if(isDeleting && i>0){
+        i--; // delete
+        setTimeout(run,40);
+      }
+      else{
+        isDeleting=false;
+        setTimeout(run,500); // wapas type
+      }
+    }
+    run();
+  });
+
+});
+</script>
+</body></html>
